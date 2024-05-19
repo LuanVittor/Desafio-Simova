@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./employee-dashboard-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./employee-dashboard-backend:/app
+    environment:
+      - NODE_ENV=development
+
+  frontend:
+    build: ./employee-dashboard
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./employee-dashboard:/app
+    environment:
+      - NODE_ENV=development
