@@ -7,14 +7,15 @@
                 <p><strong>Nome:</strong> {{ employee.name }}</p>
                 <p><strong>ID:</strong> {{ employee.code }}</p>
                 <p><strong>Status:</strong> {{ employee.active ? 'Ativo' : 'Inativo' }}</p>
-                <p><strong>Quantidade de Boletins:</strong> {{ bulletins.length }}</p>
+                <p><strong>Quantidade de Boletins:</strong> {{ filteredBulletins.length }}</p>
             </div>
             <img :src="employee.image" alt="Employee Image" class="employee-image"/>
         </div>
-        <div v-if="bulletins.length === 0" class="no-bulletins">
+        <BulletinFilters @filter="applyFilter" />
+        <div v-if="filteredBulletins.length === 0" class="no-bulletins">
             <p>Não há boletins disponíveis para este funcionário.</p>
         </div>
-        <div v-else v-for="bulletin in bulletins" :key="bulletin.id" class="bulletin">
+        <div v-else v-for="bulletin in filteredBulletins" :key="bulletin.id" class="bulletin">
             <h2>Boletim {{ bulletin.id }}</h2>
             <p>{{ formatDate(bulletin.startDate) }} - {{ formatDate(bulletin.endDate) }}</p>
             <ul>
@@ -29,16 +30,23 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Employee, Bulletin, Activity } from '@/types';
 import axios from 'axios';
 import { format } from 'date-fns';
+import BulletinFilters from './BulletinFilters.vue';
+import { Employee, Bulletin, Activity } from '@/types';
 
 export default defineComponent({
+    components: {
+        BulletinFilters
+    },
     data() {
         return {
             employee: {} as Employee,
             bulletins: [] as Bulletin[],
-            activities: [] as Activity[]
+            filteredBulletins: [] as Bulletin[],
+            activities: [] as Activity[],
+            startDate: '',
+            endDate: ''
         };
     },
     methods: {
@@ -56,6 +64,23 @@ export default defineComponent({
         goBack() {
             this.$router.push({ name: 'EmployeePanel' });
         },
+        applyFilter(filterCriteria: { startDate: string; endDate: string }) {
+            const { startDate, endDate } = filterCriteria;
+            this.startDate = startDate;
+            this.endDate = endDate;
+
+            this.filteredBulletins = this.bulletins.filter(bulletin => {
+                const bulletinStartDate = new Date(bulletin.startDate);
+                const bulletinEndDate = new Date(bulletin.endDate);
+                const start = startDate ? new Date(startDate) : null;
+                const end = endDate ? new Date(endDate) : null;
+
+                return (
+                    (!start || bulletinStartDate >= start) &&
+                    (!end || bulletinEndDate <= end)
+                );
+            });
+        },
         fetchEmployeeData() {
             const employeeId = parseInt(this.$route.params.id as string);
             axios.get(`http://localhost:3000/employees/${employeeId}`).then(response => {
@@ -63,6 +88,7 @@ export default defineComponent({
             });
             axios.get(`http://localhost:3000/bulletins/employee/${employeeId}`).then(response => {
                 this.bulletins = response.data;
+                this.filteredBulletins = response.data;
             });
             axios.get('http://localhost:3000/activities').then(response => {
                 this.activities = response.data;
@@ -174,6 +200,38 @@ export default defineComponent({
     margin-top: 20px;
     font-size: 18px;
     color: #666;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.filter-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.filter-input:focus {
+    border-color: #66afe9;
+    box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
 }
 
 @media (min-width: 769px) {
