@@ -1,6 +1,7 @@
-const activities = require('../data/activities');
+const Activity = require('../models/Activity');
 
-const getActivities = (req, res) => {
+const getActivities = async (req, res) => {
+  const activities = await Activity.findAll();
   res.json(activities);
 };
 

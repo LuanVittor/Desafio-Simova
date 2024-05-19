@@ -1,13 +1,17 @@
-const bulletins = require('../data/bulletins');
+const Bulletin = require('../models/Bulletin');
+const Appointment = require('../models/Appointment');
 
-const getBulletins = (req, res) => {
+const getBulletins = async (req, res) => {
+  const bulletins = await Bulletin.findAll({ include: Appointment });
   res.json(bulletins);
 };
 
-const getBulletinsByEmployeeId = (req, res) => {
-  const employeeId = parseInt(req.params.employeeId);
-  const employeeBulletins = bulletins.filter(bul => bul.employeeId === employeeId);
-  res.json(employeeBulletins);
+const getBulletinsByEmployeeId = async (req, res) => {
+  const bulletins = await Bulletin.findAll({
+    where: { employeeId: req.params.employeeId },
+    include: Appointment,
+  });
+  res.json(bulletins);
 };
 
 module.exports = { getBulletins, getBulletinsByEmployeeId };

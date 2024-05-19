@@ -1,11 +1,12 @@
-const employees = require('../data/employees');
+const Employee = require('../models/Employee');
 
-const getEmployees = (req, res) => {
+const getEmployees = async (req, res) => {
+  const employees = await Employee.findAll();
   res.json(employees);
 };
 
-const getEmployeeById = (req, res) => {
-  const employee = employees.find(emp => emp.id === parseInt(req.params.id));
+const getEmployeeById = async (req, res) => {
+  const employee = await Employee.findByPk(req.params.id);
   if (employee) {
     res.json(employee);
   } else {
