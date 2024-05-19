@@ -63,6 +63,15 @@ Isso fará o build e iniciará os containers para o frontend, backend e banco de
 - **Frontend**: Acesse [http://localhost:8080](http://localhost:8080)
 - **Backend**: A API estará disponível em [http://localhost:3000](http://localhost:3000)
 
+### Executando Testes Unitários do Frontend
+
+Para rodar os testes unitários do frontend, navegue até a pasta do frontend e execute o comando de testes:
+
+```bash
+cd employee-dashboard
+npm run test
+```
+
 ### Verificando a Conexão com o Banco de Dados
 
 Para garantir que o banco de dados PostgreSQL está funcionando corretamente, você pode acessar o container do banco de dados e utilizar o cliente `psql`:
