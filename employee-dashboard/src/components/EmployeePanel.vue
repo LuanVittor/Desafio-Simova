@@ -9,7 +9,7 @@
                 :employee="employee"
                 @select="selectEmployee"
             />
-            <div v-if="filteredEmployees.length === 0" class="no-results">
+            <div v-if="!filteredEmployees.length" class="no-results">
                 <p>Não existe nenhum funcionário com esses critérios de busca.</p>
             </div>
         </div>
@@ -27,13 +27,6 @@ export default defineComponent({
     components: {
         EmployeeCard,
         EmployeeFilters
-    },
-    props: {
-        employees: {
-            type: Array as () => Employee[],
-            required: false,
-            default: () => []
-        }
     },
     data() {
         return {
@@ -69,12 +62,6 @@ export default defineComponent({
     created() {
         this.fetchEmployees();
     },
-    watch: {
-        employees(newEmployees) {
-            this.allEmployees = newEmployees;
-            this.filteredEmployees = newEmployees;
-        }
-    }
 });
 </script>
 
