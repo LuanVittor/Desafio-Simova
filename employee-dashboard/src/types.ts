@@ -24,5 +24,5 @@ export interface Bulletin {
     employeeId: number;
     startDate: string;
     endDate: string;
-    appointments: Array<Appointment>;
+    Appointments: Array<Appointment>;
 }

@@ -19,7 +19,7 @@
             <h2>Boletim {{ bulletin.id }}</h2>
             <p>{{ formatDate(bulletin.startDate) }} - {{ formatDate(bulletin.endDate) }}</p>
             <ul>
-                <li v-for="appointment in bulletin.appointments" :key="appointment.id">
+                <li v-for="appointment in bulletin.Appointments" :key="appointment.id">
                     <span class="activity-color" :style="{ backgroundColor: getActivityColor(appointment.activityId) }"></span>
                     {{ formatDate(appointment.date) }} - {{ getActivityDescription(appointment.activityId) }}
                 </li>
