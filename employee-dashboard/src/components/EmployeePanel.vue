@@ -9,6 +9,9 @@
                 :employee="employee"
                 @select="selectEmployee"
             />
+            <div v-if="filteredEmployees.length === 0" class="no-results">
+                <p>Não existe nenhum funcionário com esses critérios de busca.</p>
+            </div>
         </div>
     </div>
 </template>
@@ -25,22 +28,27 @@ export default defineComponent({
         EmployeeCard,
         EmployeeFilters
     },
+    props: {
+        employees: {
+            type: Array as () => Employee[],
+            required: false,
+            default: () => []
+        }
+    },
     data() {
         return {
-            employees: [] as Employee[],
+            allEmployees: [] as Employee[],
             filteredEmployees: [] as Employee[]
         };
     },
     methods: {
-        applyFilter(filterCriteria: { search: string, status: string }) {
-            this.filteredEmployees = this.employees.filter(employee => {
+        applyFilter(filterCriteria: { search: string; status: string }) {
+            this.filteredEmployees = this.allEmployees.filter(employee => {
                 const matchesName = employee.name.toLowerCase().includes(filterCriteria.search.toLowerCase());
-
                 let matchesStatus = true;
                 if (filterCriteria.status) {
                     matchesStatus = filterCriteria.status === 'active' ? employee.active : !employee.active;
                 }
-
                 return matchesName && matchesStatus;
             });
         },
@@ -50,7 +58,7 @@ export default defineComponent({
         fetchEmployees() {
             axios.get('http://localhost:3000/employees')
                 .then(response => {
-                    this.employees = response.data;
+                    this.allEmployees = response.data;
                     this.filteredEmployees = response.data;
                 })
                 .catch(error => {
@@ -60,6 +68,12 @@ export default defineComponent({
     },
     created() {
         this.fetchEmployees();
+    },
+    watch: {
+        employees(newEmployees) {
+            this.allEmployees = newEmployees;
+            this.filteredEmployees = newEmployees;
+        }
     }
 });
 </script>
@@ -75,6 +89,13 @@ export default defineComponent({
     flex-wrap: wrap;
     gap: 16px;
     justify-content: center;
+}
+
+.no-results {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #666;
 }
 
 @media (max-width: 768px) {
