@@ -74,11 +74,10 @@ export default defineComponent({
                 const bulletinEndDate = new Date(bulletin.endDate);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
+                const isAfterStartDate = !start || bulletinStartDate >= start;
+                const isBeforeEndDate = !end || bulletinEndDate <= end;
 
-                return (
-                    (!start || bulletinStartDate >= start) &&
-                    (!end || bulletinEndDate <= end)
-                );
+                return isAfterStartDate && isBeforeEndDate;
             });
         },
         fetchEmployeeData() {
