@@ -11,7 +11,10 @@
             </div>
             <img :src="employee.image" alt="Employee Image" class="employee-image"/>
         </div>
-        <div v-for="bulletin in bulletins" :key="bulletin.id" class="bulletin">
+        <div v-if="bulletins.length === 0" class="no-bulletins">
+            <p>Não há boletins disponíveis para este funcionário.</p>
+        </div>
+        <div v-else v-for="bulletin in bulletins" :key="bulletin.id" class="bulletin">
             <h2>Boletim {{ bulletin.id }}</h2>
             <p>{{ formatDate(bulletin.startDate) }} - {{ formatDate(bulletin.endDate) }}</p>
             <ul>
@@ -58,7 +61,7 @@ export default defineComponent({
             axios.get(`http://localhost:3000/employees/${employeeId}`).then(response => {
                 this.employee = response.data;
             });
-            axios.get(`http://localhost:3000/bulletins?employeeId=${employeeId}`).then(response => {
+            axios.get(`http://localhost:3000/bulletins/employee/${employeeId}`).then(response => {
                 this.bulletins = response.data;
             });
             axios.get('http://localhost:3000/activities').then(response => {
@@ -164,6 +167,13 @@ export default defineComponent({
     height: 12px;
     margin-right: 10px;
     border-radius: 50%;
+}
+
+.no-bulletins {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #666;
 }
 
 @media (min-width: 769px) {
