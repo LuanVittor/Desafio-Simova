@@ -12,7 +12,7 @@
             <img :src="employee.image" alt="Employee Image" class="employee-image"/>
         </div>
         <BulletinFilters @filter="applyFilter" />
-        <div v-if="filteredBulletins.length === 0" class="no-bulletins">
+        <div v-if="!filteredBulletins.length" class="no-bulletins">
             <p>Não há boletins disponíveis para este funcionário.</p>
         </div>
         <div v-else v-for="bulletin in filteredBulletins" :key="bulletin.id" class="bulletin">
