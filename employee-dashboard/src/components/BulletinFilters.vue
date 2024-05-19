@@ -1,11 +1,11 @@
 <template>
     <div class="filters">
         <div class="filter-group">
-            <span class="filter-label">Start Date:</span>
+            <span class="filter-label">Data de Início:</span>
             <input type="date" v-model="startDate" @input="applyFilter" class="filter-input"/>
         </div>
         <div class="filter-group">
-            <span class="filter-label">End Date:</span>
+            <span class="filter-label">Data de Fim:</span>
             <input type="date" v-model="endDate" @input="applyFilter" class="filter-input"/>
         </div>
     </div>

@@ -1,12 +1,12 @@
 <template>
     <div class="filters">
-        <input type="text" v-model="search" placeholder="Search by name" @input="applyFilter" class="filter-input"/>
+        <input type="text" v-model="search" placeholder="Pesquisar por nome" @input="applyFilter" class="filter-input"/>
         <div class="filter-group">
             <span class="filter-label">Status:</span>
             <select v-model="status" @change="applyFilter" class="filter-select">
-                <option value="">All</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="">Todos</option>
+                <option value="active">Ativo</option>
+                <option value="inactive">Inativo</option>
             </select>
         </div>
     </div>
