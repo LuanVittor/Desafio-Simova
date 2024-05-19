@@ -8,17 +8,23 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { Employee } from '@/types';
+
+export default defineComponent({
     props: {
-        employee: Object
+        employee: {
+            type: Object as PropType<Employee>,
+            required: true
+        }
     },
     methods: {
         selectEmployee() {
             this.$emit('select', this.employee);
         }
     }
-};
+});
 </script>
 
 <style scoped>
