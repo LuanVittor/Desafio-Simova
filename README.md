@@ -65,10 +65,10 @@ Isso fará o build e iniciará os containers para o frontend, backend e banco de
 
 ### Executando Testes Unitários do Frontend
 
-Para rodar os testes unitários do frontend, navegue até a pasta do frontend e execute o comando de testes:
+Para rodar os testes unitários do frontend, acesse o container do frontend e execute o comando de testes:
 
 ```bash
-cd employee-dashboard
+docker exec -it desafio-simova-frontend bash
 npm run test
 ```
 
