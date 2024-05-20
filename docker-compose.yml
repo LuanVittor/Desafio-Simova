@@ -21,6 +21,7 @@ services:
       - "3000:3000"
     volumes:
       - ./employee-dashboard-backend:/app
+      - /app/node_modules
     environment:
       - NODE_ENV=development
       - DB_HOST=db
@@ -38,5 +39,6 @@ services:
       - "8080:8080"
     volumes:
       - ./employee-dashboard:/app
+      - /app/node_modules
     environment:
       - NODE_ENV=development
