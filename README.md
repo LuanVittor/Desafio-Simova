@@ -72,7 +72,7 @@ cd employee-dashboard
 npm run test
 ```
 
-### Verificando a Conexão com o Banco de Dados
+### Verificando a Conexão com o Banco de Dados (Nāo obrigatório)
 
 Para garantir que o banco de dados PostgreSQL está funcionando corretamente, você pode acessar o container do banco de dados e utilizar o cliente `psql`:
 
