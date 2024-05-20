@@ -1,29 +1,35 @@
 <template>
     <div class="employee-details">
         <button class="back-button" @click="goBack">Voltar para o Painel</button>
-        <div class="employee-header">
-            <div class="employee-info">
-                <h1>{{ employee.name }}</h1>
-                <p><strong>Nome:</strong> {{ employee.name }}</p>
-                <p><strong>ID:</strong> {{ employee.code }}</p>
-                <p><strong>Status:</strong> {{ employee.active ? 'Ativo' : 'Inativo' }}</p>
-                <p><strong>Quantidade de Boletins:</strong> {{ filteredBulletins.length }}</p>
+        <div v-if="isLoading" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Carregando dados do funcionário...</p>
+        </div>
+        <div v-else>
+            <div class="employee-header">
+                <div class="employee-info">
+                    <h1>{{ employee.name }}</h1>
+                    <p><strong>Nome:</strong> {{ employee.name }}</p>
+                    <p><strong>ID:</strong> {{ employee.code }}</p>
+                    <p><strong>Status:</strong> {{ employee.active ? 'Ativo' : 'Inativo' }}</p>
+                    <p><strong>Quantidade de Boletins:</strong> {{ filteredBulletins.length }}</p>
+                </div>
+                <img :src="employee.image" alt="Employee Image" class="employee-image"/>
             </div>
-            <img :src="employee.image" alt="Employee Image" class="employee-image"/>
-        </div>
-        <BulletinFilters @filter="applyFilter" />
-        <div v-if="!filteredBulletins.length" class="no-bulletins">
-            <p>Não há boletins disponíveis para este funcionário.</p>
-        </div>
-        <div v-else v-for="bulletin in filteredBulletins" :key="bulletin.id" class="bulletin">
-            <h2>Boletim {{ bulletin.id }}</h2>
-            <p>{{ formatDate(bulletin.startDate) }} - {{ formatDate(bulletin.endDate) }}</p>
-            <ul>
-                <li v-for="appointment in bulletin.Appointments" :key="appointment.id">
-                    <span class="activity-color" :style="{ backgroundColor: getActivityColor(appointment.activityId) }"></span>
-                    {{ formatDate(appointment.date) }} - {{ getActivityDescription(appointment.activityId) }}
-                </li>
-            </ul>
+            <BulletinFilters @filter="applyFilter" />
+            <div v-if="!filteredBulletins.length" class="no-bulletins">
+                <p>Não há boletins disponíveis para este funcionário.</p>
+            </div>
+            <div v-else v-for="bulletin in filteredBulletins" :key="bulletin.id" class="bulletin">
+                <h2>Boletim {{ bulletin.id }}</h2>
+                <p>{{ formatDate(bulletin.startDate) }} - {{ formatDate(bulletin.endDate) }}</p>
+                <ul>
+                    <li v-for="appointment in bulletin.Appointments" :key="appointment.id">
+                        <span class="activity-color" :style="{ backgroundColor: getActivityColor(appointment.activityId) }"></span>
+                        {{ formatDate(appointment.date) }} - {{ getActivityDescription(appointment.activityId) }}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
@@ -46,7 +52,8 @@ export default defineComponent({
             filteredBulletins: [] as Bulletin[],
             activities: [] as Activity[],
             startDate: '',
-            endDate: ''
+            endDate: '',
+            isLoading: true
         };
     },
     methods: {
@@ -82,16 +89,23 @@ export default defineComponent({
         },
         fetchEmployeeData() {
             const employeeId = parseInt(this.$route.params.id as string);
-            axios.get(`http://localhost:3000/employees/${employeeId}`).then(response => {
-                this.employee = response.data;
-            });
-            axios.get(`http://localhost:3000/bulletins/employee/${employeeId}`).then(response => {
-                this.bulletins = response.data;
-                this.filteredBulletins = response.data;
-            });
-            axios.get('http://localhost:3000/activities').then(response => {
-                this.activities = response.data;
-            });
+
+            const employeeRequest = axios.get(`http://localhost:3000/employees/${employeeId}`);
+            const bulletinsRequest = axios.get(`http://localhost:3000/bulletins/employee/${employeeId}`);
+            const activitiesRequest = axios.get('http://localhost:3000/activities');
+
+            Promise.all([employeeRequest, bulletinsRequest, activitiesRequest])
+                .then(([employeeResponse, bulletinsResponse, activitiesResponse]) => {
+                    this.employee = employeeResponse.data;
+                    this.bulletins = bulletinsResponse.data;
+                    this.filteredBulletins = bulletinsResponse.data;
+                    this.activities = activitiesResponse.data;
+                    this.isLoading = false;
+                })
+                .catch(error => {
+                    console.error('There was an error fetching the data!', error);
+                    this.isLoading = false;
+                });
         }
     },
     created() {
@@ -231,6 +245,28 @@ export default defineComponent({
 .filter-input:focus {
     border-color: #66afe9;
     box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+}
+
+.spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @media (min-width: 769px) {

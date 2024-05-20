@@ -2,7 +2,11 @@
     <div class="employee-panel">
         <h1>Painel de Funcionários</h1>
         <EmployeeFilters @filter="applyFilter" />
-        <div class="employee-cards">
+        <div v-if="isLoading" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Carregando funcionários...</p>
+        </div>
+        <div v-else class="employee-cards">
             <EmployeeCard
                 v-for="employee in filteredEmployees"
                 :key="employee.id"
@@ -31,7 +35,8 @@ export default defineComponent({
     data() {
         return {
             allEmployees: [] as Employee[],
-            filteredEmployees: [] as Employee[]
+            filteredEmployees: [] as Employee[],
+            isLoading: true
         };
     },
     methods: {
@@ -49,13 +54,16 @@ export default defineComponent({
             this.$router.push({ name: 'EmployeeDetails', params: { id: employee.id } });
         },
         fetchEmployees() {
+            this.isLoading = true;
             axios.get('http://localhost:3000/employees')
                 .then(response => {
                     this.allEmployees = response.data;
                     this.filteredEmployees = response.data;
+                    this.isLoading = false;
                 })
                 .catch(error => {
                     console.error('There was an error fetching the employees!', error);
+                    this.isLoading = false;
                 });
         }
     },
@@ -83,6 +91,28 @@ export default defineComponent({
     margin-top: 20px;
     font-size: 18px;
     color: #666;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+}
+
+.spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @media (max-width: 768px) {
