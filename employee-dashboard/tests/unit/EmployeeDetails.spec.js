@@ -2,6 +2,10 @@ import { mount } from '@vue/test-utils';
 import EmployeeDetails from '@/components/EmployeeDetails.vue';
 import BulletinFilters from '@/components/BulletinFilters.vue';
 import flushPromises from 'flush-promises';
+import axios from 'axios';
+
+jest.mock('axios');
+const mockedAxios = axios;
 
 describe('EmployeeDetails.vue', () => {
     let wrapper;
@@ -40,15 +44,11 @@ describe('EmployeeDetails.vue', () => {
     ];
 
     beforeEach(async () => {
+        mockedAxios.get.mockResolvedValueOnce({ data: employee });
+        mockedAxios.get.mockResolvedValueOnce({ data: bulletins });
+        mockedAxios.get.mockResolvedValueOnce({ data: activities });
+
         wrapper = mount(EmployeeDetails, {
-            data() {
-                return {
-                    employee,
-                    bulletins,
-                    filteredBulletins: bulletins,
-                    activities,
-                };
-            },
             global: {
                 mocks: {
                     $route: {
