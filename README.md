@@ -13,7 +13,7 @@ Este é um painel de funcionários desenvolvido com Vue.js no frontend e Node.js
 ### Clonando o Repositório
 
 ```bash
-git clone git@github.com:seu-usuario/Desafio-Simova.git
+git clone https://github.com/seu-usuario/Desafio-Simova.git
 cd Desafio-Simova
 ```
 
