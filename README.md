@@ -53,7 +53,7 @@ services:
 Para iniciar o projeto, basta executar o Docker Compose:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 Isso fará o build e iniciará os containers para o frontend, backend e banco de dados.
