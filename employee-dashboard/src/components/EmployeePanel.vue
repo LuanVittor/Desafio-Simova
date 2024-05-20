@@ -12,6 +12,7 @@
                 :key="employee.id"
                 :employee="employee"
                 @select="selectEmployee"
+                class="employee-card"
             />
             <div v-if="!filteredEmployees.length" class="no-results">
                 <p>Não existe nenhum funcionário com esses critérios de busca.</p>
@@ -86,6 +87,12 @@ export default defineComponent({
     justify-content: center;
 }
 
+.employee-card {
+    box-sizing: border-box;
+    min-width: 250px;
+    max-width: 300px;
+}
+
 .no-results {
     text-align: center;
     margin-top: 20px;
@@ -119,6 +126,11 @@ export default defineComponent({
     .employee-cards {
         flex-direction: column;
         align-items: center;
+    }
+
+    .employee-card {
+        width: 100%;
+        max-width: none;
     }
 }
 </style>
