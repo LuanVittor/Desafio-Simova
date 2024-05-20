@@ -68,9 +68,12 @@ Isso fará o build e iniciará os containers para o frontend, backend e banco de
 Para rodar os testes unitários do frontend, acesse o container do frontend e execute o comando de testes:
 
 ```bash
-docker exec -it desafio-simova-frontend bash
+docker exec -it desafio-simova-frontend-1 bash
+```
+```bash
 npm run test
 ```
+
 
 ### Verificando a Conexão com o Banco de Dados (Nāo obrigatório)
 
