@@ -13,8 +13,8 @@ Este é um painel de funcionários desenvolvido com Vue.js no frontend e Node.js
 ### Clonando o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/Desafio-Simova.git
-cd Desafio-Simova
+git clone https://github.com/seu-usuario/Employee-Dashboard.git
+cd Employee-Dashboard
 ```
 
 ### Estrutura do Projeto
@@ -68,7 +68,7 @@ Isso fará o build e iniciará os containers para o frontend, backend e banco de
 Para rodar os testes unitários do frontend, acesse o container do frontend e execute o comando de testes:
 
 ```bash
-docker exec -it desafio-simova-frontend-1 bash
+docker exec -it employee-dashboard-frontend-1 bash
 ```
 ```bash
 npm run test
@@ -80,7 +80,7 @@ npm run test
 Para garantir que o banco de dados PostgreSQL está funcionando corretamente, você pode acessar o container do banco de dados e utilizar o cliente `psql`:
 
 ```bash
-docker exec -it desafio-simova-db-1 /bin/bash
+docker exec -it employee-dashboard-db-1 /bin/bash
 psql -U myuser -d employeedb
 ```
 
@@ -89,7 +89,7 @@ psql -U myuser -d employeedb
 As migrações e o seed de dados serão executados automaticamente na inicialização do backend. Se precisar rodar manualmente:
 
 ```bash
-docker exec -it desafio-simova-backend-1 /bin/bash
+docker exec -it employee-dashboard-backend-1 /bin/bash
 npx sequelize-cli db:migrate
 node src/migrations/seed.js
 ```
